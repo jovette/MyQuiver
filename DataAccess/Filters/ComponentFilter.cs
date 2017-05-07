@@ -8,6 +8,6 @@ namespace MyQuiver.DataAccess.Filters
         /// <summary>
         /// Get or set list of manufacturers for filtering
         /// </summary>
-        public List<Manufacturer> Manufacturers { get; set; }
+        public List<ManufacturerFilter> Manufacturers { get; set; }
     }
 }

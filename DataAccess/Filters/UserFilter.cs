@@ -8,7 +8,7 @@ namespace MyQuiver.DataAccess.Filters
 {
     public class UserFilter
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         public UserType? Type { get; set; }
 

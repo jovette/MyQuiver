@@ -4,6 +4,7 @@ using System.Text;
 using MyQuiver.Common;
 using MyQuiver.DataAccess.Model;
 using MongoDB.Driver;
+using MyQuiver.DataAccess.Filters;
 
 namespace MyQuiver.DataAccess.Repository
 {
@@ -26,33 +27,78 @@ namespace MyQuiver.DataAccess.Repository
 
         public void Delete(int id)
         {
-            var filter = Builders<Limb>.Filter.Eq("LimbId", id);
+            LimbFilter limbFilter = new LimbFilter
+            {
+                LimbId = id
+            };
+
+            var filter = GetFilterQuery<Limb, LimbFilter>(limbFilter);
             DeleteResult result = m_collection.DeleteOne(filter);
         }
 
         public List<Limb> FindByDrawWeight(int drawWeight)
         {
-            throw new NotImplementedException();
+            LimbFilter limbFilter = new LimbFilter
+            {
+                DrawWeight = drawWeight
+            };
+
+            var filter = GetFilterQuery<Limb, LimbFilter>(limbFilter);
+            var limbs = m_collection.Find(filter).ToList();
+            return limbs;
         }
 
         public List<Limb> FindByLimbLength(LimbLength length)
         {
-            throw new NotImplementedException();
+            LimbFilter limbFilter = new LimbFilter
+            {
+                LimbLengthType = length
+            };
+
+            var filter = GetFilterQuery<Limb, LimbFilter>(limbFilter);
+            var limbs = m_collection.Find(filter).ToList();
+            return limbs;
         }
 
         public List<Limb> FindByLimbMaterial(LimbMaterial material)
         {
-            throw new NotImplementedException();
+            LimbFilter limbFilter = new LimbFilter
+            {
+                LimbMaterialType = material
+            };
+
+            var filter = GetFilterQuery<Limb, LimbFilter>(limbFilter);
+            var limbs = m_collection.Find(filter).ToList();
+            return limbs;
         }
 
         public Limb Get(int id)
         {
-            throw new NotImplementedException();
+            LimbFilter limbFilter = new LimbFilter
+            {
+                LimbId = id
+            };
+
+            var filter = GetFilterQuery<Limb, LimbFilter>(limbFilter);
+            var limb = m_collection.Find(filter).FirstOrDefault();
+
+            return limb;
         }
 
         public void Update(Limb model)
         {
-            throw new NotImplementedException();
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            LimbFilter limbFilter = new LimbFilter
+            {
+                LimbId = model.LimbId
+            };
+
+            var filter = GetFilterQuery<Limb, LimbFilter>(limbFilter);
+            var updateDef = GetUpdateDefinition<Limb>(model);
+
+            m_collection.UpdateOne(filter, updateDef);
         }
     }
 }
